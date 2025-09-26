@@ -42,12 +42,12 @@ int add_employee(dbheader_t *dbhdr, employee_t *employees,
 		printf("No name given\n");
 		return STATUS_ERROR;
 	}
-	strcpy(emp.name, tmp);
+	strncpy(emp.name, tmp, EMP_STR_LEN - 1);
 	if ((tmp = strtok(NULL, delim)) == NULL) {
 		printf("No address given\n");
 		return STATUS_ERROR;
 	}
-	strcpy(emp.address, tmp);
+	strncpy(emp.address, tmp, EMP_STR_LEN - 1);
 	char *end_ptr = NULL;
 	emp.hours = strtol(strtok(NULL, delim),
 									&end_ptr, 10);

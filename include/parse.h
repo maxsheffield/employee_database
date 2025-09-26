@@ -3,6 +3,7 @@
 
 #define HEADER_MAGIC 0x4c4c4144
 #define VERSION 1
+#define EMP_STR_LEN 256
 
 typedef struct dbheader_t {
 	unsigned int magic;
@@ -12,8 +13,8 @@ typedef struct dbheader_t {
 } dbheader_t;
 
 typedef struct employee_t {
-	char name[256];
-	char address[256];
+	char name[EMP_STR_LEN];
+	char address[EMP_STR_LEN];
 	unsigned int hours;
 } employee_t;
 
