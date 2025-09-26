@@ -26,9 +26,10 @@ void list_employees(dbheader_t *dbhdr,
 }
 
 void print_line(int length) {
-	char buffer[length + 2] = {};
+	char buffer[length + 2];
 	memset(buffer, '-', length);
-	strcat(buffer, "\n");
+	memset(buffer + length, '\n', 1);
+	memset(buffer + length + 1, '\0', 1);
 	printf("%s", buffer);
 }
 
