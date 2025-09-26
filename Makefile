@@ -6,7 +6,7 @@ TDB = ./mynewdb.db
 TESTS_WITH_DB = $(wildcard testdb/*/*)
 EMP = "Timmy H.,123 Sheshire Ln.,120"
 
-run: clean default tests
+run: clean default 
 
 tests: $(TESTS_WITH_DB) bootstraptests
 
