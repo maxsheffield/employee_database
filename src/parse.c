@@ -68,8 +68,7 @@ int read_employees(int fd, dbheader_t *dbhdr,
 						 employee_t **employeesOut) {
 	unsigned short count = dbhdr->count;
 	lseek(fd, sizeof(dbheader_t), SEEK_SET);
-	*employeesOut = malloc(sizeof(employee_t) * \
-							count+10);
+	*employeesOut = malloc(sizeof(employee_t) * (count+10));
 	if (*employeesOut == NULL) {
 		RAISE_ERROR;
 		return STATUS_ERROR;
