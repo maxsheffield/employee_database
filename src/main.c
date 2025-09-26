@@ -10,6 +10,17 @@
 
 // play with other getopt functions and itself
 // write better tests in makefile
+// Extend functionality – Consider adding features like 
+// record deletion, input validation (e.g., guard 
+// 	against buffer overflow in strcpy), or richer 
+// CLI feedback. Doing so will require touching the 
+// main control flow and parse helpers.
+// Improve tee functions individually.
+// TODO: Support updating existing records through the CLI (e.g., add an -u flag and helper).​:codex-file-citation[codex-file-citation]{line_range_start=14 line_range_end=50 path=src/main.c git_url="https://github.com/maxsheffield/employee_database/blob/master/src/main.c#L14-L50"}​
+// TODO: Implement employee deletion functionality (CLI flag plus record-shifting helper).​:codex-file-citation[codex-file-citation]{line_range_start=14 line_range_end=50 path=src/main.c git_url="https://github.com/maxsheffield/employee_database/blob/master/src/main.c#L14-L50"}​
+// TODO: Improve validation when parsing new employee data before writing to the array.​:codex-file-citation[codex-file-citation]{line_range_start=36 line_range_end=61 path=src/parse.c git_url="https://github.com/maxsheffield/employee_database/blob/master/src/parse.c#L36-L61"}​
+// TODO: Offer filtered or sorted listing views when printing employees.​:codex-file-citation[codex-file-citation]{line_range_start=12 line_range_end=25 path=src/parse.c git_url="https://github.com/maxsheffield/employee_database/blob/master/src/parse.c#L12-L25"}​
+// use gzip compression to compress employees struct
 
 void print_usage(char *argv[]) {
 	printf("Usage: %s -n -f <database file>\n", argv[0]);
