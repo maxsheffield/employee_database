@@ -33,10 +33,10 @@ void print_line(int length) {
 	printf("%s", buffer);
 }
 
-int add_employee(dbheader_t *dbhdr, employee_t *employees, 
+int add_employee(dbheader_t *dbhdr, employee_t **employees, 
 								char *addstring) {
 	employee_t emp = {};
-	static char *delim = ".,";
+	static char *delim = ",";
 	char *tmp = NULL;
 	if ((tmp = strtok(addstring, delim)) == NULL) {
 		printf("No name given\n");
@@ -56,19 +56,47 @@ int add_employee(dbheader_t *dbhdr, employee_t *employees,
 		printf("No hours given\n");
 		return STATUS_ERROR;
 	}
-	*(employees + dbhdr->count) = emp;
+	*employees = realloc(*employees, 
+			((dbhdr->count) + 1) * sizeof(employee_t));
+	*((*employees) + dbhdr->count) = emp;
 	(dbhdr->count)++;
-	dbhdr->filesize += sizeof(employee_t);
-
 	return STATUS_SUCCESS;
+}
+
+int remove_employee(dbheader_t *dbhdr, 
+			employee_t *employees, char *name) {
+
+	for (int i = 0; i < dbhdr->count; i++) {
+		if (!strncmp((employees + i)->name, name, 
+					EMP_STR_LEN - 1)) {
+			memmove(employees + i, employees + i + 1, \
+		((dbhdr->count) - i - 1) * sizeof(employee_t));
+			(dbhdr->count)--;
+			return STATUS_SUCCESS;
+		}
+	}
+	return STATUS_ERROR;
 }
 
 
 int read_employees(int fd, dbheader_t *dbhdr,
 						 employee_t **employeesOut) {
+	if (fd < 0) {
+		printf("Bad fd\n");
+		return STATUS_ERROR;
+	}
+
 	unsigned short count = dbhdr->count;
 	lseek(fd, sizeof(dbheader_t), SEEK_SET);
-	*employeesOut = malloc(sizeof(employee_t) * (count+10));
+
+	/**
+	 * made it one more than current size of database
+	 * employee data to allow for adding an employee
+	 * later
+	 * **/
+	*employeesOut = calloc(count,
+							sizeof(employee_t));
+	
 	if (*employeesOut == NULL) {
 		RAISE_ERROR;
 		return STATUS_ERROR;
@@ -96,7 +124,14 @@ int output_file(int fd, dbheader_t *dbhdr,
 	dbhdr->magic = htonl(dbhdr->magic);
 	dbhdr->version = htons(dbhdr->version);
 	dbhdr->count = htons(dbhdr->count);
+	dbhdr->filesize = sizeof(dbheader_t) + \
+			sizeof(employee_t) * host_count;
 	dbhdr->filesize = htonl(dbhdr->filesize);
+
+	if (ftruncate(fd, 0)) {
+		RAISE_ERROR;
+		return STATUS_ERROR;
+	}
 
 	if(lseek(fd, 0, SEEK_SET)) {
 		RAISE_ERROR;

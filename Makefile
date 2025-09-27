@@ -5,7 +5,9 @@ DBH = "\x44\x41\x4c\x4c\x01\x00\x00\x00\x0c\x00"
 TDB = ./mynewdb.db
 TESTS_WITH_DB = $(wildcard testdb/*/*)
 EMP = "Timmy H.,123 Sheshire Ln.,120"
-EMP2 = "Benji Mahmood.,555 Tuson Az., 520"
+EMP2 = "Benji Mahmood,555 Tuson Az.,520"
+EMPN = "Timmy H."
+EMP2N = "Benji Mahmood"
 
 # work out how make parses shell commands
 
@@ -29,6 +31,12 @@ bootstraptest2: FORCE
 	@echo "adding 2 employees"
 	@./$(TARGET) -f $(TDB) -l -a $(EMP2)
 	@./$(TARGET) -f $(TDB) -l -a $(EMP)
+	@echo "removing 2 employees"
+	@./$(TARGET) -f $(TDB) -l -r $(EMP2N)
+	@./$(TARGET) -f $(TDB) -l -r $(EMPN)
+	@echo "removing non existant employee"
+	@./$(TARGET) -f $(TDB) -l -r $(EMPN)
+
 
 testdb/inandout/%: FORCE
 	@echo $@
@@ -41,6 +49,7 @@ testdb/addingemployees/%: FORCE
 	@cp -f $@ $(TDB)
 	@./$(TARGET) -f $(TDB) -l
 	@./$(TARGET) -f $(TDB)  -a $(EMP) -l
+	@./$(TARGET) -f $(TDB)  -r $(EMPN) -l
 
 
 default: $(TARGET)
