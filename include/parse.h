@@ -27,5 +27,6 @@ int output_file(int fd, dbheader_t *, employee_t *employees);
 void list_employees(dbheader_t *dbhdr, employee_t *employees);
 int add_employee(dbheader_t *dbhdr, employee_t **employees, char *addstring);
 int remove_employee(dbheader_t *dbhdr, employee_t *employees, char *name);
+int update_hours(dbheader_t *dbhdr, employee_t *employees, char *update);
 
 #endif

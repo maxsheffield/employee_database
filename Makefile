@@ -8,6 +8,8 @@ EMP = "Timmy H.,123 Sheshire Ln.,120"
 EMP2 = "Benji Mahmood,555 Tuson Az.,520"
 EMPN = "Timmy H."
 EMP2N = "Benji Mahmood"
+EMPU = "Timmy H.,140"
+EMP2U = "Benji Mahmood,100"
 
 # work out how make parses shell commands
 
@@ -31,6 +33,11 @@ bootstraptest2: FORCE
 	@echo "adding 2 employees"
 	@./$(TARGET) -f $(TDB) -l -a $(EMP2)
 	@./$(TARGET) -f $(TDB) -l -a $(EMP)
+	@echo "updating 2 employees"
+	@./$(TARGET) -f $(TDB) -l -u $(EMP2U)
+	@./$(TARGET) -f $(TDB) -l -u $(EMPU)
+	@echo "updating non existant employee"
+	@./$(TARGET) -f $(TDB) -l -u "mmm,123"
 	@echo "removing 2 employees"
 	@./$(TARGET) -f $(TDB) -l -r $(EMP2N)
 	@./$(TARGET) -f $(TDB) -l -r $(EMPN)

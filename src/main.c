@@ -26,6 +26,7 @@
 // add unique id to employee so that same employees
 // cannot be added and also allow for sorting
 // look at strtok source code
+// add removing multiple employees 
 
 /** Homework
  * Remove employee by name -r
@@ -39,6 +40,7 @@ void print_usage(char *argv[]) {
 	printf("\t -l  - list the employees\n");
 	printf("\t -a  - add employee name,address,hours (required)\n");
 	printf("\t -r  - remove employee with name (required)\n");
+	printf("\t -u  - update employee with name and new hours (required)\n");
 }
 
 int main(int argc, char *argv[]) { 
@@ -46,6 +48,8 @@ int main(int argc, char *argv[]) {
 	bool newfile = false;
 	bool list = false;
 	bool removing = false;
+	bool updating = false;
+	char *update_name_hours = NULL;
 	char *remove_name = NULL;
 	char *filepath = NULL;
 	char *addstring = NULL;
@@ -54,7 +58,7 @@ int main(int argc, char *argv[]) {
 	employee_t *employees = NULL;
 	bool verbose = false;
 
-	while ((c = getopt(argc, argv, "vlnf:a:r:")) != -1) {
+	while ((c = getopt(argc, argv, "vlnf:a:r:u:")) != -1) {
 		switch (c) {
 			case 'n':
 				newfile = true;
@@ -72,6 +76,10 @@ int main(int argc, char *argv[]) {
 			case 'r':
 				remove_name = optarg;
 				removing = true;
+				break;
+			case 'u':
+				updating = true;
+				update_name_hours = optarg;
 				break;
 			case 'v':
 				verbose = true;
@@ -92,6 +100,12 @@ int main(int argc, char *argv[]) {
 
 	if (removing && remove_name == NULL) {
 		printf("Removal name is required\n");
+		print_usage(argv);
+		return 0;
+	}
+
+	if (updating && update_name_hours == NULL) {
+		printf("Update name and hours is required\n");
 		print_usage(argv);
 		return 0;
 	}
@@ -139,6 +153,14 @@ int main(int argc, char *argv[]) {
 	if (read_employees(fd, header, &employees)) {
 		printf("Failed to read employees\n");
 		return -1;
+	}
+
+	if (update_name_hours != NULL) {
+		if (update_hours(header, employees,
+				update_name_hours) == STATUS_ERROR) {
+			printf("Failed to update employee\n");
+			return 0;
+		}
 	}
 
 	if (addstring != NULL) {

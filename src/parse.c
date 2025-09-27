@@ -78,6 +78,39 @@ int remove_employee(dbheader_t *dbhdr,
 	return STATUS_ERROR;
 }
 
+int update_hours(dbheader_t *dbhdr, 
+				employee_t *employees, char *update){
+	
+	static char *delim = ",";
+	employee_t emp = {};
+	char *tmp = NULL;
+
+	if ((tmp = strtok(update, delim)) == NULL) {
+		printf("No name given\n");
+		return STATUS_ERROR;
+	}
+	strncpy(emp.name, tmp, EMP_STR_LEN - 1);
+	
+	char *end_ptr = NULL;
+	emp.hours = strtol(strtok(NULL, delim),
+									&end_ptr, 10);
+	// Could overflow emp.hours
+	if (*end_ptr != '\0') {
+		printf("No hours given\n");
+		return STATUS_ERROR;
+	}
+
+	for (int i = 0; i < dbhdr->count; i++) {
+		if (!strncmp((employees + i)->name, emp.name, 
+					EMP_STR_LEN - 1)) {
+			
+			(employees + i)->hours = emp.hours;
+			return STATUS_SUCCESS;
+		}
+	}
+	return STATUS_ERROR;
+}
+
 
 int read_employees(int fd, dbheader_t *dbhdr,
 						 employee_t **employeesOut) {
